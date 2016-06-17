@@ -1,0 +1,14 @@
+
+
+# Don't want to push these into repository
+data.txt
+pictures/
+
+
+# Python stuff
+*.pyc
+.idea/ 
+
+# Mac stuff
+*.DS_Store
+*.swp
