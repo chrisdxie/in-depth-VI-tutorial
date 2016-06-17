@@ -61,9 +61,9 @@ def variational_inference(data, iter_max):
     var_dists["mu"] = []
     var_dists["z"] = []
     for k in range(K):
-        mu_init = np.random.multivariate_normal(mu_0, Sigma_tau)  # randomly initialize the mean, keep Sigma_tau
-        var_dists["mu"].append(Gaussian(np.concatenate((Sigma_tau_inv.dot(mu_init),
-                                                        -1/2 * Sigma_tau_inv.reshape(-1) ))))
+        mu_init = np.random.multivariate_normal(mu_0, Sigma_0)  # randomly initialize the mean, keep Sigma_0
+        var_dists["mu"].append(Gaussian(np.concatenate((Sigma_0_inv.dot(mu_init),
+                                                        -1/2 * Sigma_0_inv.reshape(-1) ))))
     for n in range(N):
         var_dists["z"].append(Categorical(1/K * np.ones(K)))
 

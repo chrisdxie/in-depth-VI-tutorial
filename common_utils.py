@@ -30,8 +30,8 @@ if d == 1:
     mu_0 = np.array([0])
 elif d == 2:
     mu_0 = np.array([0,0])
-Sigma_tau = 3 * np.eye(d) # covariance matrix of prior on mu_k
-Sigma_tau_inv = np.linalg.inv(Sigma_tau)  # Precomputation
+Sigma_0 = 3 * np.eye(d) # covariance matrix of prior on mu_k
+Sigma_0_inv = np.linalg.inv(Sigma_0)  # Precomputation
 
 
 ##########  Variational Distributions ##########
@@ -141,11 +141,11 @@ def compute_ELBO(var_dists, data):
     ELBO += C_alpha_0 + (alpha_0 - 1) * np.sum(pi_exp_suff_stats)
 
     # E_q[ln P(\mu_k)]
-    ELBO += - K * d/2 * log(2 * np.pi) - K * 1/2 * log(np.linalg.det(Sigma_tau))
+    ELBO += - K * d/2 * log(2 * np.pi) - K * 1/2 * log(np.linalg.det(Sigma_0))
     for k in range(K):
-        ELBO += -1/2 * (Sigma_tau_inv.reshape(-1).dot(mu_exp_suff_stats[k,d:])
-                        - 2 * mu_0.dot( Sigma_tau_inv ).dot( mu_exp_suff_stats[k,:d] )
-                        + mu_0.dot( Sigma_tau_inv ).dot( mu_0 ))
+        ELBO += -1/2 * (Sigma_0_inv.reshape(-1).dot(mu_exp_suff_stats[k,d:])
+                        - 2 * mu_0.dot( Sigma_0_inv ).dot( mu_exp_suff_stats[k,:d] )
+                        + mu_0.dot( Sigma_0_inv ).dot( mu_0 ))
 
     # E_q[ln P(z | \pi)]
     for n in range(N):
@@ -222,8 +222,8 @@ def ELBO_gradient_lambda(var_dists, data, correction):
     gradients = []
     for k in range(K):
         lambda_k = var_dists["mu"][k].lambdas
-        temp_0 = (Sigma_tau_inv.dot(mu_0) + Sigma_inv.dot(sum_gamma_x[k])) - lambda_k[:d]
-        temp_1 = -1/2 * (Sigma_tau_inv + Sigma_inv * sum_gamma[k]).reshape(-1) - lambda_k[d:]
+        temp_0 = (Sigma_0_inv.dot(mu_0) + Sigma_inv.dot(sum_gamma_x[k])) - lambda_k[:d]
+        temp_1 = -1/2 * (Sigma_0_inv + Sigma_inv * sum_gamma[k]).reshape(-1) - lambda_k[d:]
         # from IPython import embed; embed()
         gradients.append(np.concatenate((temp_0, temp_1)))
     gradients = np.array(gradients)

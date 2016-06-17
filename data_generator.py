@@ -20,7 +20,7 @@ def generate_data():
     # Sample mu_k for all k
     mu = []
     for k in range(K):
-        candidate = np.random.multivariate_normal(mu_0, Sigma_tau)
+        candidate = np.random.multivariate_normal(mu_0, Sigma_0)
         mu.append(candidate)
     mu = np.array(mu,dtype = np.float)
 
